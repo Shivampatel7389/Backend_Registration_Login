@@ -1,17 +1,12 @@
-# ===================================================
-# Multi-stage Dockerfile for Spring Boot on Render
-# ===================================================
-
 # Stage 1: Build application with Maven and JDK 21
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Pre-fetch Maven dependencies for efficient layer caching
+# Copy pom.xml and source code
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# Copy source code and package executable JAR
 COPY src ./src
+
+# Build executable JAR
 RUN mvn clean package -DskipTests
 
 # Stage 2: Production-ready lightweight JRE 21 runtime
