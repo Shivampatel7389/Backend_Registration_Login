@@ -9,8 +9,8 @@ A robust, production-ready Spring Boot 3 backend implementing secure User Regist
 - **Spring Security 6**: Stateless authentication with custom JWT filter (`JwtAuthenticationFilter`).
 - **HttpOnly Cookie Security**: Mitigates Cross-Site Scripting (XSS) by preventing JavaScript access to JWT tokens.
 - **BCrypt Password Hashing**: Passwords encrypted with salted BCrypt before database persistence.
-- **Spring Data JPA & Hibernate**: Automated schema generation and entity relationship mapping (`defaultdb` / `reglog_db`).
-- **CORS Configured**: Pre-configured for seamless integration with frontend applications (`http://localhost:5173`).
+- **Spring Data JPA & Hibernate**: Automated schema generation and entity relationship mapping.
+- **CORS Configured**: Pre-configured for seamless integration with frontend applications.
 
 ---
 
@@ -19,8 +19,9 @@ A robust, production-ready Spring Boot 3 backend implementing secure User Regist
 - **Framework**: Spring Boot 3.4.3
 - **Language**: Java 21+
 - **Security**: Spring Security 6, JJWT (`io.jsonwebtoken` 0.12.6)
-- **Database**: MySQL 8.0 (`reglog_db`)
+- **Database**: MySQL 8.0 / Aiven Cloud MySQL
 - **Build Tool**: Apache Maven
+- **Deployment**: Docker / Render
 
 ---
 
@@ -30,41 +31,35 @@ A robust, production-ready Spring Boot 3 backend implementing secure User Regist
 | :--- | :--- | :--- | :---: | :--- |
 | `POST` | `/api/reg` | Register a new user | ❌ No | `{ "name", "email", "phone", "password" }` |
 | `POST` | `/api/login` | Authenticate & issue HttpOnly JWT cookie | ❌ No | `{ "name", "password" }` |
-| `GET` | `/api/me` | Retrieve authenticated user profile | ✅ Yes (Cookie) | *None* |
+| `GET` | `/api/me` | Retrieve authenticated user profile | ✅ Yes (Cookie / Bearer) | *None* |
 | `POST` | `/api/logout` | Clear HttpOnly JWT cookie | ❌ No | *None* |
 
 ---
 
-## ⚙️ Configuration (`application.properties`)
+## ☁️ Cloud Deployment (Render)
 
-```properties
-server.port=8080
+This repository includes a multi-stage `Dockerfile` and `render.yaml` for containerized deployment on [Render](https://render.com).
 
-# Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:${DB_PORT:3306}/reglog_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-spring.datasource.username=${DB_USERNAME:your_db_username}
-spring.datasource.password=${DB_PASSWORD:your_db_password}
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-# JWT Settings
-jwt.secret=${JWT_SECRET:your_256_bit_secret_key_here}
-jwt.expiration=86400000
-jwt.cookie.name=jwt_token
-jwt.cookie.max-age=86400
-jwt.cookie.secure=false
-jwt.cookie.same-site=Lax
-```
+### Render Service Setup:
+1. In the Render Dashboard, go to your Web Service **Settings** (or click **New + -> Web Service**).
+2. Set **Runtime** to **Docker** (Render will automatically detect the `Dockerfile`).
+3. Under the **Environment** tab, configure the following Environment Variables:
+   - `DB_URL`: `jdbc:mysql://<your-aiven-host>:<port>/defaultdb?sslMode=REQUIRED&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC`
+   - `DB_USERNAME`: `<your_db_username>`
+   - `DB_PASSWORD`: `<your_db_password>`
+   - `JWT_SECRET`: `<your_256_bit_secret_key>`
+   - `CORS_ALLOWED_ORIGINS`: `*` (or your deployed frontend URL)
+4. Click **Deploy**. Render will build the Docker container and run the Spring Boot service.
 
 ---
 
-## 🏃 Quick Start
+## 🏃 Quick Start (Local)
 
-1. Ensure MySQL is running on `localhost:3306` (or `3307`).
-2. Run the application:
+1. Run the application:
    ```bash
    mvn clean spring-boot:run
    ```
-3. Test with cURL or Postman:
+2. Test registration with cURL:
    ```bash
    curl -X POST http://localhost:8080/api/reg \
      -H "Content-Type: application/json" \
