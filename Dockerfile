@@ -19,5 +19,5 @@ COPY --from=build /app/target/RegLogBackApp-1.0.0.jar app.jar
 # Default exposed port (Render injects $PORT)
 EXPOSE 8080
 
-# Execute Spring Boot application
-ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar app.jar"]
+# Execute Spring Boot application with container-aware memory constraints
+ENTRYPOINT ["sh", "-c", "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Dserver.port=${PORT:-8080} -jar app.jar"]
