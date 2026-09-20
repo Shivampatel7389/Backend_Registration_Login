@@ -5,10 +5,11 @@ A robust, production-ready Spring Boot 3 backend implementing secure User Regist
 ## 🚀 Key Features
 
 - **Spring Boot 3 & Java 21+**: Modern, enterprise-grade backend architecture.
+- **Aiven Cloud MySQL Database**: Cloud-hosted MySQL database with full SSL/TLS encryption.
 - **Spring Security 6**: Stateless authentication with custom JWT filter (`JwtAuthenticationFilter`).
 - **HttpOnly Cookie Security**: Mitigates Cross-Site Scripting (XSS) by preventing JavaScript access to JWT tokens.
 - **BCrypt Password Hashing**: Passwords encrypted with salted BCrypt before database persistence.
-- **Spring Data JPA & Hibernate**: Automated schema generation and entity relationship mapping (`reglog_db`).
+- **Spring Data JPA & Hibernate**: Automated schema generation and entity relationship mapping (`defaultdb` / `reglog_db`).
 - **CORS Configured**: Pre-configured for seamless integration with frontend applications (`http://localhost:5173`).
 
 ---
