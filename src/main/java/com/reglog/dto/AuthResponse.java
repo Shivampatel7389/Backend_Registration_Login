@@ -4,6 +4,7 @@ public class AuthResponse {
 
     private String message;
     private UserResponse user;
+    private String token;
 
     public AuthResponse() {
     }
@@ -11,6 +12,12 @@ public class AuthResponse {
     public AuthResponse(String message, UserResponse user) {
         this.message = message;
         this.user = user;
+    }
+
+    public AuthResponse(String message, UserResponse user, String token) {
+        this.message = message;
+        this.user = user;
+        this.token = token;
     }
 
     public String getMessage() {
@@ -27,5 +34,13 @@ public class AuthResponse {
 
     public void setUser(UserResponse user) {
         this.user = user;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

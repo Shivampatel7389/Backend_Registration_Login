@@ -96,7 +96,7 @@ public class AuthService {
                 .build();
 
         UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getPhone());
-        AuthResponse authResponse = new AuthResponse("Login successful", userResponse);
+        AuthResponse authResponse = new AuthResponse("Login successful", userResponse, jwt);
 
         return new LoginResult(cookie, authResponse);
     }
