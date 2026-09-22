@@ -15,8 +15,9 @@ services:
       - key: JWT_SECRET
         value: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       - key: DB_URL
-        sync: false
+        value: jdbc:mysql://mysql-3fb39daf-loginpage.d.aivencloud.com:15184/defaultdb?sslMode=REQUIRED&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: DB_PASSWORD
         sync: false
+
 
 
